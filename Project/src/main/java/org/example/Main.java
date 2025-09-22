@@ -1,17 +1,37 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import org.example.io.CsvWriter;
+import org.example.io.JsonReader;
+import org.example.model.RecordItem;
+
+import java.io.File;
+import java.util.List;
+
+/**
+ * Entry point. Example:
+ * java -jar json-csv-tool.jar input.json output.csv ;
+ */
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        if (args.length < 3) {
+            System.err.println("Usage: <input.json> <output.csv> <delimiter>");
+            System.err.println("Example: data.json export.csv ;");
+            System.exit(1);
+        }
+        String input = args[0];
+        String output = args[1];
+        char delimiter = args[2].charAt(0);
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+        JsonReader reader = new JsonReader();
+        CsvWriter writer = new CsvWriter();
+
+        try {
+            List<RecordItem> items = reader.readItems(new File(input));
+            writer.writeItems(output, items, delimiter);
+            System.out.println("CSV written: " + output + " (rows: " + items.size() + ")");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(2);
         }
     }
 }

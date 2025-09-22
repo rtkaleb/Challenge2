@@ -1,17 +1,73 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  POM (Project Object Model) de Maven.
+  Define metadatos del proyecto, dependencias, plugins y configuración de build.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <!-- Versión del modelo POM. Para Maven actual se usa 4.0.0 -->
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>ProjectJSON</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!-- Identificadores únicos del artefacto que se va a construir -->
+    <groupId>org.example</groupId>          <!-- Grupo/organización del proyecto -->
+    <artifactId>json-csv-tool</artifactId>  <!-- Nombre del artefacto (jar) -->
+    <version>1.0.0</version>                <!-- Versión del artefacto -->
 
+    <!-- Propiedades reutilizables: versiones y ajustes del compilador -->
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Versión del lenguaje Java para compilar (fuente y bytecode) -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+
+        <!-- Variable para centralizar la versión de JUnit -->
+        <junit.version>5.10.2</junit.version>
+
     </properties>
+
+    <!-- Dependencias que el código necesita en tiempo de compilación/ejecución/test -->
+    <dependencies>
+
+        <!-- Jackson Databind: parseo/serialización JSON -> objetos Java y viceversa -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+
+        <!-- OpenCSV: lectura/escritura de archivos CSV -->
+        <!-- Nota de seguridad: Se usa 5.12.0 (que trae commons-lang3 >= 3.18.0)
+             para evitar la vulnerabilidad reportada en versiones previas. -->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.12.0</version>
+        </dependency>
+
+        <!-- JUnit Jupiter (JUnit 5): framework de pruebas unitarias -->
+        <!-- 'scope' = test: sólo está presente al ejecutar tests, no en el JAR final -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <!-- Configuración del proceso de construcción (build): plugins y sus versiones -->
+    <build>
+        <plugins>
+
+            <!-- Surefire: ejecuta las pruebas unitarias durante la fase 'test' -->
+            <!-- Fija versión moderna que soporta JUnit 5 sin configuración extra -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
